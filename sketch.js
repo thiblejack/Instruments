@@ -24,19 +24,25 @@ class Button {
     let button = this;
 
     this.button.onHover = function() {
-      if(!button.hover) button.hover = true;
+      if(!button.hover) {
+        button.hover = true;
+        cursor(HAND);
+      }
     }
 
     this.button.onOutside = function() {
-      if(button.hover) button.hover = false;
+      if(button.hover) {
+        button.hover = false;
+        cursor(ARROW);
+      }
     }
 
     this.button.onPress = function() {
-      //button.press = true;
+      button.press = true;
     }
 
     this.button.onRelease = function() {
-      //button.press = false;
+      button.press = false;
     }
 
     this.update();
@@ -68,18 +74,20 @@ class Button {
     let h = this.button.height;
     if(this.instrument >= 0) image(images[this.instrument][this.version],x,y,w,h);
     if(this.press) {
-      fill(black);
+      fill(white);
       rect(x,y,w,h);
     }
     else if(this.hover) {
       erase(180,0);
       rect(x,y,w,h);
       noErase();
+    }
+    if(this.press || this.hover) {
       fill(black);
       textFont(fontL);
       textSize(0.05*dimension);
       textAlign(CENTER);
-      text(instruments[this.instrument],x+w/2,y+h/2);
+      text(instruments[this.instrument],x+w/2,y+h/2-0.007*dimension);
     }
     noFill();
     stroke(black);
@@ -199,7 +207,6 @@ function preload() {
   temp.push(loadImage('images/guitarer-elec-carrousel-02.jpg'));
   temp.push(loadImage('images/guitarer-elec-carrousel-03.jpg'));
   temp.push(loadImage('images/guitarer-elec-carrousel-04.jpg'));
-  temp.push(loadImage('images/guitarer-elec-carrousel-04b.jpg'));
   images.push(temp);
   instruments.push('guitare électrique');
   temp = [];
