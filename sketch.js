@@ -8,6 +8,9 @@ var buttons = [];
 var instruments = [];
 var images = [];
 
+var playButton;
+var playSymbol;
+
 class Button {
   constructor(b) {
     this.pos = b;
@@ -18,7 +21,6 @@ class Button {
     this.button = new Clickable();
     this.button.color = white;
     this.button.cornerRadius = 0;
-    this.button.stroke = black;
     this.button.text = '';
 
     let button = this;
@@ -33,6 +35,7 @@ class Button {
     this.button.onOutside = function() {
       if(button.hover) {
         button.hover = false;
+        button.press = false;
         cursor(ARROW);
       }
     }
@@ -96,6 +99,82 @@ class Button {
   }
 }
 
+class PlayButton {
+  constructor(b) {
+    this.hover = false;
+    this.press = false;
+
+    this.button = new Clickable();
+    this.button.color = white;
+    this.button.cornerRadius = 0;
+    this.button.text = '';
+
+    let button = this;
+
+    this.button.onHover = function() {
+      if(!button.hover) {
+        button.hover = true;
+        cursor(HAND);
+      }
+    }
+
+    this.button.onOutside = function() {
+      if(button.hover) {
+        button.hover = false;
+        button.press = false;
+        cursor(ARROW);
+      }
+    }
+
+    this.button.onPress = function() {
+      button.press = true;
+    }
+
+    this.button.onRelease = function() {
+      button.press = false;
+    }
+
+    this.update();
+  }
+
+  update() {
+    let x = width/2;
+    let y = height/2+0.4*dimension;
+    let w = 0.08*dimension;
+    let h = w;
+    this.button.locate(x-w/2,
+                       y-h/2);
+    this.button.width = w;
+    this.button.height = h;
+    this.button.strokeWeight = 0;
+  }
+
+  draw() {
+    this.button.draw();
+    let x = this.button.x;
+    let y = this.button.y;
+    let w = this.button.width;
+    let h = this.button.height;
+    image(playSymbol,x,y,w,h);
+    if(this.press) {
+      fill(white);
+      rect(x,y,w,h);
+    }
+    else if(this.hover) {
+      erase(180,0);
+      rect(x,y,w,h);
+      noErase();
+    }
+    if(this.press || this.hover) {
+      fill(black);
+      textFont(fontL);
+      textSize(0.03*dimension);
+      textAlign(CENTER);
+      text('écouter',x+w/2,y+h/2-0.007*dimension);
+    }
+  }
+}
+
 function setInstruments() {
   let i;
   let same = true;
@@ -115,6 +194,8 @@ function setInstruments() {
 function preload() {
   fontM = loadFont('medium.otf');
   fontL = loadFont('light.otf');
+
+  playSymbol = loadImage('play-symbol.png');
 
   let temp = [];
   temp.push(loadImage('images/accordeon-carrousel-01.jpg'));
@@ -328,6 +409,8 @@ function setup() {
     buttons.push(new Button(b));
   }
 
+  playButton = new PlayButton();
+
   setInstruments();
 }
 
@@ -341,6 +424,8 @@ function draw() {
   for(let b = 0; b < 4; b++) {
     buttons[b].draw();
   }
+
+  playButton.draw();
 }
 
 function windowResized() {
@@ -351,6 +436,8 @@ function windowResized() {
   for(let b = 0; b < 4; b++) {
     buttons[b].update();
   }
+
+  playButton.update();
 }
 
 function keyPressed() {
