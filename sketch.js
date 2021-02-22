@@ -6,10 +6,14 @@ var white = 255;
 var buttons = [];
 
 var instruments = [];
+var sounds = [];
 var images = [];
 
 var playButton;
 var playSymbol;
+
+var hasWon = false;
+var hasLost = false;
 
 class Button {
   constructor(b) {
@@ -46,6 +50,7 @@ class Button {
 
     this.button.onRelease = function() {
       button.press = false;
+      checkAnswer(button.instrument);
     }
 
     this.update();
@@ -75,22 +80,24 @@ class Button {
     let y = this.button.y;
     let w = this.button.width;
     let h = this.button.height;
-    if(this.instrument >= 0) image(images[this.instrument][this.version],x,y,w,h);
-    if(this.press) {
-      fill(white);
-      rect(x,y,w,h);
-    }
-    else if(this.hover) {
-      erase(180,0);
-      rect(x,y,w,h);
-      noErase();
-    }
-    if(this.press || this.hover) {
-      fill(black);
-      textFont(fontL);
-      textSize(0.05*dimension);
-      textAlign(CENTER);
-      text(instruments[this.instrument],x+w/2,y+h/2-0.007*dimension);
+    if(this.instrument >= 0) {
+      image(images[this.instrument][this.version],x,y,w,h);
+      if(this.press) {
+        fill(white);
+        rect(x,y,w,h);
+      }
+      else if(this.hover) {
+        erase(180,0);
+        rect(x,y,w,h);
+        noErase();
+      }
+      if(this.press || this.hover) {
+        fill(black);
+        textFont(fontL);
+        textSize(0.05*dimension);
+        textAlign(CENTER);
+        text(instruments[this.instrument],x+w/2,y+h/2-0.007*dimension);
+      }
     }
     noFill();
     stroke(black);
@@ -103,6 +110,7 @@ class PlayButton {
   constructor(b) {
     this.hover = false;
     this.press = false;
+    this.instrument = -1;
 
     this.button = new Clickable();
     this.button.color = white;
@@ -128,6 +136,7 @@ class PlayButton {
 
     this.button.onPress = function() {
       button.press = true;
+      if(button.instrument >= 0) sounds[button.instrument][button.version].play();
     }
 
     this.button.onRelease = function() {
@@ -135,6 +144,11 @@ class PlayButton {
     }
 
     this.update();
+  }
+
+  setInstrument(i) {
+    this.instrument = i;
+    this.version = floor(random(sounds[this.instrument].length));
   }
 
   update() {
@@ -168,14 +182,15 @@ class PlayButton {
     if(this.press || this.hover) {
       fill(black);
       textFont(fontL);
-      textSize(0.03*dimension);
+      textSize(0.025*dimension);
       textAlign(CENTER);
-      text('écouter',x+w/2,y+h/2-0.007*dimension);
+      text('écouter',x+w/2,y+h/2-0.005*dimension);
     }
   }
 }
 
 function setInstruments() {
+  stopSound();
   let i;
   let same = true;
   for(let b = 0; b < 4; b++) {
@@ -189,6 +204,29 @@ function setInstruments() {
     buttons[b].setInstrument(i);
     same = true;
   }
+
+  i = buttons[floor(random(4))].instrument;
+  playButton.setInstrument(i);
+
+  hasWon = false;
+  hasLost = false;
+}
+
+function stopSound() {
+  if(playButton.instrument >= 0) sounds[playButton.instrument][playButton.version].stop();
+}
+
+function checkAnswer(i) {
+  if(i == playButton.instrument) win();
+  else loose();
+}
+
+function win() {
+  hasWon = true;
+}
+
+function loose() {
+  hasLost = true;
 }
 
 function preload() {
@@ -197,7 +235,12 @@ function preload() {
 
   playSymbol = loadImage('play-symbol.png');
 
+  soundFormats('m4a');
+
   let temp = [];
+  temp.push(loadSound('sounds/accordeon'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/accordeon-carrousel-01.jpg'));
   temp.push(loadImage('images/accordeon-carrousel-02.jpg'));
   temp.push(loadImage('images/accordeon-carrousel-03.jpg'));
@@ -206,12 +249,18 @@ function preload() {
   images.push(temp);
   instruments.push('accordéon');
   temp = [];
+  temp.push(loadSound('sounds/basse-elec'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/basse-elec-carrousel-01.jpg'));
   temp.push(loadImage('images/basse-elec-carrousel-02.jpg'));
   temp.push(loadImage('images/basse-elec-carrousel-03.jpg'));
   temp.push(loadImage('images/basse-elec-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('basse électrique');
+  temp = [];
+  temp.push(loadSound('sounds/basson'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/basson-carrousel-01.jpg'));
   temp.push(loadImage('images/basson-carrousel-02.jpg'));
@@ -221,6 +270,10 @@ function preload() {
   images.push(temp);
   instruments.push('basson');
   temp = [];
+  temp.push(loadSound('sounds/batterie'));
+  temp.push(loadSound('sounds/batterie-jazz'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/batterie-carrousel-01.jpg'));
   temp.push(loadImage('images/batterie-carrousel-02.jpg'));
   temp.push(loadImage('images/batterie-carrousel-03.jpg'));
@@ -229,12 +282,19 @@ function preload() {
   images.push(temp);
   instruments.push('batterie');
   temp = [];
+  temp.push(loadSound('sounds/chant'));
+  temp.push(loadSound('sounds/chant-jazz'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/chant-carrousel-01.jpg'));
   temp.push(loadImage('images/chant-carrousel-02.jpg'));
   temp.push(loadImage('images/chant-carrousel-03.jpg'));
   temp.push(loadImage('images/chant-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('chant');
+  temp = [];
+  temp.push(loadSound('sounds/clarinette'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/clarinette-carrousel-01.jpg'));
   temp.push(loadImage('images/clarinette-carrousel-02.jpg'));
@@ -243,12 +303,19 @@ function preload() {
   images.push(temp);
   instruments.push('clarinette');
   temp = [];
+  temp.push(loadSound('sounds/clavecin'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/clavecin-carrousel-01.jpg'));
   temp.push(loadImage('images/clavecin-carrousel-02.jpg'));
   temp.push(loadImage('images/clavecin-carrousel-03.jpg'));
   temp.push(loadImage('images/clavecin-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('clavecin');
+  temp = [];
+  temp.push(loadSound('sounds/contrebasse'));
+  temp.push(loadSound('sounds/contrebasse-jazz'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/contrebasse-carrousel-01.jpg'));
   temp.push(loadImage('images/contrebasse-carrousel-02.jpg'));
@@ -257,12 +324,18 @@ function preload() {
   images.push(temp);
   instruments.push('contrebasse');
   temp = [];
+  temp.push(loadSound('sounds/cor'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/cor-carrousel-01.jpg'));
   temp.push(loadImage('images/cor-carrousel-02.jpg'));
   temp.push(loadImage('images/cor-carrousel-03.jpg'));
   temp.push(loadImage('images/cor-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('cor');
+  temp = [];
+  temp.push(loadSound('sounds/flute-bec'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/flute-bec-carrousel-01.jpg'));
   temp.push(loadImage('images/flute-bec-carrousel-02.jpg'));
@@ -271,6 +344,10 @@ function preload() {
   images.push(temp);
   instruments.push('flûte à bec');
   temp = [];
+  temp.push(loadSound('sounds/flute-trav'));
+  temp.push(loadSound('sounds/flute-trav-jazz'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/flute-trav-carrousel-01.jpg'));
   temp.push(loadImage('images/flute-trav-carrousel-02.jpg'));
   temp.push(loadImage('images/flute-trav-carrousel-03.jpg'));
@@ -278,11 +355,17 @@ function preload() {
   images.push(temp);
   instruments.push('flûte traversière');
   temp = [];
+  temp.push(loadSound('sounds/guitare'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/guitare_carrousel-01.jpg'));
   temp.push(loadImage('images/guitare_carrousel-02.jpg'));
   temp.push(loadImage('images/guitare_carrousel-03.jpg'));
   images.push(temp);
   instruments.push('guitare');
+  temp = [];
+  temp.push(loadSound('sounds/guitare-elec'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/guitarer-elec-carrousel-01.jpg'));
   temp.push(loadImage('images/guitarer-elec-carrousel-02.jpg'));
@@ -291,12 +374,18 @@ function preload() {
   images.push(temp);
   instruments.push('guitare électrique');
   temp = [];
+  temp.push(loadSound('sounds/harpe'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/harpe-carrousel-01.jpg'));
   temp.push(loadImage('images/harpe-carrousel-02.jpg'));
   temp.push(loadImage('images/harpe-carrousel-03.jpg'));
   temp.push(loadImage('images/harpe-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('harpe');
+  temp = [];
+  temp.push(loadSound('sounds/hautbois'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/hautbois-carrousel-01.jpg'));
   temp.push(loadImage('images/hautbois-carrousel-02.jpg'));
@@ -305,6 +394,9 @@ function preload() {
   images.push(temp);
   instruments.push('hautbois');
   temp = [];
+  temp.push(loadSound('sounds/marimba'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/marimba-carrousel-01.jpg'));
   temp.push(loadImage('images/marimba-carrousel-02.jpg'));
   temp.push(loadImage('images/marimba-carrousel-03.jpg'));
@@ -312,12 +404,20 @@ function preload() {
   images.push(temp);
   instruments.push('marimba');
   temp = [];
+  temp.push(loadSound('sounds/orgue'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/orgue-carrousel-01.jpg'));
   temp.push(loadImage('images/orgue-carrousel-02.jpg'));
   temp.push(loadImage('images/orgue-carrousel-03.jpg'));
   temp.push(loadImage('images/orgue-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('orgue');
+  temp = [];
+  temp.push(loadSound('sounds/piano'));
+  temp.push(loadSound('sounds/piano-jazz'));
+  temp.push(loadSound('sounds/piano-elec-jazz'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/piano-carrousel-01.jpg'));
   temp.push(loadImage('images/piano-carrousel-02.jpg'));
@@ -330,11 +430,18 @@ function preload() {
   images.push(temp);
   instruments.push('piano');
   temp = [];
+  temp.push(loadSound('sounds/saxophone'));
+  temp.push(loadSound('sounds/saxophone-jazz'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/saxophone-carrousel-01.jpg'));
   temp.push(loadImage('images/saxophone-carrousel-02.jpg'));
   temp.push(loadImage('images/saxophone-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('saxophone');
+  temp = [];
+  temp.push(loadSound('sounds/timbales'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/timbales-carrousel-01.jpg'));
   temp.push(loadImage('images/timbales-carrousel-02.jpg'));
@@ -343,12 +450,19 @@ function preload() {
   images.push(temp);
   instruments.push('timbales');
   temp = [];
+  temp.push(loadSound('sounds/trombone-coulisse'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/trombone-coulisse-carrousel-01.jpg'));
   temp.push(loadImage('images/trombone-coulisse-carrousel-02.jpg'));
   temp.push(loadImage('images/trombone-coulisse-carrousel-03.jpg'));
   temp.push(loadImage('images/trombone-coulisse-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('trombone');
+  temp = [];
+  temp.push(loadSound('sounds/trompette'));
+  temp.push(loadSound('sounds/trompette-jazz'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/trompette-carrousel-01.jpg'));
   temp.push(loadImage('images/trompette-carrousel-02.jpg'));
@@ -357,6 +471,9 @@ function preload() {
   images.push(temp);
   instruments.push('trompette');
   temp = [];
+  temp.push(loadSound('sounds/tuba'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/tuba-carrousel-01.jpg'));
   temp.push(loadImage('images/tuba-carrousel-02.jpg'));
   temp.push(loadImage('images/tuba-carrousel-03.jpg'));
@@ -364,11 +481,18 @@ function preload() {
   images.push(temp);
   instruments.push('tuba');
   temp = [];
+  temp.push(loadSound('sounds/vibraphone'));
+  temp.push(loadSound('sounds/vibraphone-jazz'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/vibraphone-carrousel-01.jpg'));
   temp.push(loadImage('images/vibraphone-carrousel-02.jpg'));
   temp.push(loadImage('images/vibraphone-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('vibraphone');
+  temp = [];
+  temp.push(loadSound('sounds/violon-alto'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/violon-alto_carrousel-01.jpg'));
   temp.push(loadImage('images/violon-alto_carrousel-02.jpg'));
@@ -378,12 +502,19 @@ function preload() {
   images.push(temp);
   instruments.push('violon alto');
   temp = [];
+  temp.push(loadSound('sounds/violon'));
+  temp.push(loadSound('sounds/violon-jazz'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/violon-carrousel-01.jpg'));
   temp.push(loadImage('images/violon-carrousel-02.jpg'));
   temp.push(loadImage('images/violon-carrousel-03.jpg'));
   temp.push(loadImage('images/violon-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('violon');
+  temp = [];
+  temp.push(loadSound('sounds/violoncelle'));
+  sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/violoncelle-carrousel-01.jpg'));
   temp.push(loadImage('images/violoncelle-carrousel-02.jpg'));
@@ -392,12 +523,21 @@ function preload() {
   images.push(temp);
   instruments.push('violoncelle');
   temp = [];
+  temp.push(loadSound('sounds/xylophone'));
+  sounds.push(temp);
+  temp = [];
   temp.push(loadImage('images/xylophone-carrousel-01.jpg'));
   temp.push(loadImage('images/xylophone-carrousel-02.jpg'));
   temp.push(loadImage('images/xylophone-carrousel-03.jpg'));
   temp.push(loadImage('images/xylophone-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('xylophone');
+
+  for(let i in sounds) {
+    for(s in sounds[i]) {
+      sounds[i][s].playMode('restart');
+    }
+  }
 }
 
 function setup() {
@@ -416,13 +556,25 @@ function setup() {
 
 function draw() {
   background(white);
+
   fill(black);
   textFont(fontM);
   textSize(0.075*dimension);
   textAlign(CENTER);
   text('Jeu des Instruments', width/2,height/2-0.4*dimension);
-  for(let b = 0; b < 4; b++) {
-    buttons[b].draw();
+
+  if(hasWon) {
+    textSize(0.05*dimension);
+    text('Bravo !', width/2,height/2);
+  }
+  else if(hasLost) {
+    textSize(0.05*dimension);
+    text("Oups, c'est raté...", width/2,height/2);
+  }
+  else {
+    for(let b = 0; b < 4; b++) {
+      buttons[b].draw();
+    }
   }
 
   playButton.draw();
