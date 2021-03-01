@@ -136,7 +136,7 @@ class PlayButton {
 
     this.button.onPress = function() {
       button.press = true;
-      if(button.instrument >= 0) sounds[button.instrument][button.version].play();
+      button.playSound();
     }
 
     this.button.onRelease = function() {
@@ -149,6 +149,11 @@ class PlayButton {
   setInstrument(i) {
     this.instrument = i;
     this.version = floor(random(sounds[this.instrument].length));
+    this.playSound();
+  }
+
+  playSound() {
+    if(this.instrument >= 0) sounds[this.instrument][this.version].play();
   }
 
   update() {
@@ -235,7 +240,7 @@ function preload() {
 
   playSymbol = loadImage('play-symbol.png');
 
-  soundFormats('m4a');
+  soundFormats('mp3');
 
   let temp = [];
   temp.push(loadSound('sounds/accordeon'));
