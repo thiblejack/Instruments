@@ -129,6 +129,7 @@ class Button {
   }
 }
 
+
 class PlayButton {
   constructor(b) {
     this.hover = false;
@@ -143,14 +144,16 @@ class PlayButton {
     let button = this;
 
     this.button.onHover = function() {
-      if(!button.hover) {
+      if(isMobile.any()) return;
+      else if(!button.hover) {
         button.hover = true;
         cursor(HAND);
       }
     }
 
     this.button.onOutside = function() {
-      if(button.hover) {
+      if(isMobile.any()) return;
+      else if(button.hover) {
         button.hover = false;
         button.press = false;
         cursor(ARROW);
@@ -192,7 +195,6 @@ class PlayButton {
   }
 
   draw() {
-    if(isMobile.any()) return;
     this.button.draw();
     let x = this.button.x;
     let y = this.button.y;
@@ -617,6 +619,7 @@ function setup() {
 function draw() {
   background(white);
 
+  noStroke();
   fill(black);
   textFont(fontM);
   textSize(0.075*dimension);
