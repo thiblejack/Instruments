@@ -53,14 +53,16 @@ class Button {
     let button = this;
 
     this.button.onHover = function() {
-      if(!button.hover) {
+      if(isMobile.any()) return;
+      else if(!button.hover) {
         button.hover = true;
         cursor(HAND);
       }
     }
 
     this.button.onOutside = function() {
-      if(button.hover) {
+      if(isMobile.any()) return;
+      else if(button.hover) {
         button.hover = false;
         button.press = false;
         cursor(ARROW);
