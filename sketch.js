@@ -16,6 +16,10 @@ var hasWon = false;
 var hasLost = false;
 
 var level = 0;
+var numBut;
+var numButMax = 16;
+
+var layout;
 
 var isMobile = {
     Android: function() {
@@ -78,7 +82,7 @@ class Button {
       checkAnswer(button.instrument);
     }
 
-    this.update();
+    if(this.pos < numBut) this.update();
   }
 
   setInstrument(i) {
@@ -87,13 +91,24 @@ class Button {
   }
 
   update() {
-    let x = this.pos%2;
-    let y = floor(this.pos/2);
-    let w = dimension/2.1;
+    let x, y, xMax;
+    let yMax = layout.length;
+    let i = this.pos;
+    for(let r = 0; r < layout.length; r++) {
+      for(let c = 0; c < layout[r]; c++) {
+        if(!i) {
+          x = c;
+          y = r;
+          xMax = layout[r];
+        }
+        i--;
+      }
+    }
+    let w = dimension*(1/layout[0]-0.01);
     let h = 5*w/8;
-    let margin = 0.01*dimension;
-    this.button.locate(width/2+(x-1)*w+margin,
-                       height/2+(y-1)*h+margin);
+    let margin = 0.007*dimension;
+    this.button.locate(width/2+(x-xMax/2)*w+margin,
+                       height/2+(y-yMax/2)*h+margin);
     this.button.width = w-2*margin;
     this.button.height = h-2*margin;
     this.button.strokeWeight = 0;
@@ -222,13 +237,40 @@ class PlayButton {
   }
 }
 
+function setNumBut(nB) {
+  numBut = nB;
+
+  switch(numBut) {
+    case 2:  layout = [2]; break;
+    case 3:  layout = [2,1]; break;
+    case 4:  layout = [2,2]; break;
+    case 5:  layout = [3,2]; break;
+    case 6:  layout = [3,3]; break;
+    case 7:  layout = [3,2,2]; break;
+    case 8:  layout = [3,3,2]; break;
+    case 9:  layout = [3,3,3]; break;
+    case 10: layout = [4,4,2]; break;
+    case 11: layout = [4,4,3]; break;
+    case 12: layout = [4,4,4]; break;
+    case 13: layout = [4,3,3,3]; break;
+    case 14: layout = [4,4,3,3]; break;
+    case 15: layout = [4,4,4,3]; break;
+    case 16: layout = [4,4,4,4]; break;
+    default: console.log('error: numBut is wrong');
+  }
+
+  for(b in buttons) {
+    buttons[b].update();
+  }
+}
+
 function setInstruments() {
   stopSound();
   let i, i0, i1;
   i0 = 0;
   i1 = images.length;
   let same = true;
-  for(let b = 0; b < 4; b++) {
+  for(let b = 0; b < numBut; b++) {
     while(same) {
       i = floor(random(i0,i1));
       same = false;
@@ -240,7 +282,7 @@ function setInstruments() {
     same = true;
   }
 
-  i = buttons[floor(random(4))].instrument;
+  i = buttons[floor(random(numBut))].instrument;
   playButton.setInstrument(i);
 
   hasWon = false;
@@ -609,7 +651,9 @@ function setup() {
 
   dimension = Math.min(width, height);
 
-  for(let b = 0; b < 4; b++) {
+  setNumBut(2);
+
+  for(let b = 0; b < numButMax; b++) {
     buttons.push(new Button(b));
   }
 
@@ -637,7 +681,7 @@ function draw() {
     text("Oups, c'est raté...", width/2,height/2);
   }
   else {
-    for(let b = 0; b < 4; b++) {
+    for(let b = 0; b < numBut; b++) {
       buttons[b].draw();
     }
   }
@@ -650,7 +694,7 @@ function windowResized() {
 
   dimension = Math.min(width, height);
 
-  for(let b = 0; b < 4; b++) {
+  for(let b = 0; b < numBut; b++) {
     buttons[b].update();
   }
 
@@ -658,17 +702,69 @@ function windowResized() {
 }
 
 function keyPressed() {
+  console.log(keyCode);
   switch(keyCode) {
     case 49:
-    level = 0;
     setInstruments();
     break;
     case 50:
-    level = 1;
+    setNumBut(2);
     setInstruments();
     break;
     case 51:
-    level = 2;
+    setNumBut(3);
+    setInstruments();
+    break;
+    case 52:
+    setNumBut(4);
+    setInstruments();
+    break;
+    case 53:
+    setNumBut(5);
+    setInstruments();
+    break;
+    case 54:
+    setNumBut(6);
+    setInstruments();
+    break;
+    case 55:
+    setNumBut(7);
+    setInstruments();
+    break;
+    case 56:
+    setNumBut(8);
+    setInstruments();
+    break;
+    case 57:
+    setNumBut(9);
+    setInstruments();
+    break;
+    case 81:
+    setNumBut(10);
+    setInstruments();
+    break;
+    case 87:
+    setNumBut(11);
+    setInstruments();
+    break;
+    case 69:
+    setNumBut(12);
+    setInstruments();
+    break;
+    case 82:
+    setNumBut(13);
+    setInstruments();
+    break;
+    case 84:
+    setNumBut(14);
+    setInstruments();
+    break;
+    case 90:
+    setNumBut(15);
+    setInstruments();
+    break;
+    case 85:
+    setNumBut(16);
     setInstruments();
     break;
   }
