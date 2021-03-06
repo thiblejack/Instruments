@@ -134,7 +134,7 @@ class Button {
       if(this.press || this.hover) {
         fill(black);
         textFont(fontL);
-        textSize(0.05*dimension);
+        textSize(0.1*dimension/layout[0]);
         textAlign(CENTER);
         text(instruments[this.instrument],x+w/2,y+h/2-0.007*dimension);
       }
@@ -678,7 +678,24 @@ function draw() {
   }
   else if(hasLost) {
     textSize(0.05*dimension);
-    text("Oups, c'est raté...", width/2,height/2);
+    let i = playButton.instrument;
+    let determinant;
+    switch(i) {
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+      case 15:
+      case 23: determinant = 'une'; break;
+      case 18: determinant = 'du'; break;
+      case 24: determinant = 'des'; break;
+      default: determinant = 'un';
+    }
+    text("Oups, c'est raté...\nC'était "+determinant+" "+instruments[i]+" !", width/2,height/2);
   }
   else {
     for(let b = 0; b < numBut; b++) {
