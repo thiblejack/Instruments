@@ -12,6 +12,9 @@ var images = [];
 var playButton;
 var playSymbol;
 
+var nextButton;
+var nextSymbol;
+
 var hasWon = false;
 var hasLost = false;
 
@@ -237,6 +240,85 @@ class PlayButton {
   }
 }
 
+class NextButton {
+  constructor(b) {
+    this.hover = false;
+    this.press = false;
+
+    this.button = new Clickable();
+    this.button.color = white;
+    this.button.cornerRadius = 0;
+    this.button.text = '';
+
+    let button = this;
+
+    this.button.onHover = function() {
+      if(isMobile.any()) return;
+      else if(!button.hover) {
+        button.hover = true;
+        cursor(HAND);
+      }
+    }
+
+    this.button.onOutside = function() {
+      if(isMobile.any()) return;
+      else if(button.hover) {
+        button.hover = false;
+        button.press = false;
+        cursor(ARROW);
+      }
+    }
+
+    this.button.onPress = function() {
+      button.press = true;
+    }
+
+    this.button.onRelease = function() {
+      button.press = false;
+      nextLevel();
+    }
+
+    this.update();
+  }
+
+  update() {
+    let x = width/2+0.28*dimension;
+    let y = height/2+0.4*dimension;
+    let w = 0.08*dimension;
+    let h = w;
+    this.button.locate(x-w/2,
+                       y-h/2);
+    this.button.width = w;
+    this.button.height = h;
+    this.button.strokeWeight = 0;
+  }
+
+  draw() {
+    this.button.draw();
+    let x = this.button.x;
+    let y = this.button.y;
+    let w = this.button.width;
+    let h = this.button.height;
+    image(nextSymbol,x,y,w,h);
+    if(this.press) {
+      fill(white);
+      rect(x,y,w,h);
+    }
+    else if(this.hover) {
+      erase(180,0);
+      rect(x,y,w,h);
+      noErase();
+    }
+    if(this.press || this.hover) {
+      fill(black);
+      textFont(fontL);
+      textSize(0.025*dimension);
+      textAlign(CENTER);
+      text('suivant',x+w/2,y+h/2-0.005*dimension);
+    }
+  }
+}
+
 function setNumBut(nB) {
   numBut = nB;
 
@@ -293,6 +375,11 @@ function stopSound() {
   if(playButton.instrument >= 0) sounds[playButton.instrument][playButton.version].stop();
 }
 
+function nextLevel() {
+  setNumBut(level+2 > 16 ? 16 : level+2);
+  setInstruments();
+}
+
 function checkAnswer(i) {
   if(i == playButton.instrument) win();
   else loose();
@@ -300,10 +387,12 @@ function checkAnswer(i) {
 
 function win() {
   hasWon = true;
+  level++;
 }
 
 function loose() {
   hasLost = true;
+  level = 0;
 }
 
 function preload() {
@@ -311,6 +400,8 @@ function preload() {
   fontL = loadFont('light.otf');
 
   playSymbol = loadImage('play-symbol.png');
+
+  nextSymbol = loadImage('next-symbol.png');
 
   soundFormats('mp3');
 
@@ -659,6 +750,8 @@ function setup() {
 
   playButton = new PlayButton();
 
+  nextButton = new NextButton();
+
   setInstruments();
 }
 
@@ -671,6 +764,12 @@ function draw() {
   textSize(0.075*dimension);
   textAlign(CENTER);
   text('Jeu des Instruments', width/2,height/2-0.4*dimension);
+
+  textSize(0.05*dimension);
+  textAlign(LEFT);
+  text('Score : '+level, width/2-0.375*dimension,height/2+0.39*dimension);
+
+  textAlign(CENTER);
 
   if(hasWon) {
     textSize(0.05*dimension);
@@ -704,6 +803,8 @@ function draw() {
   }
 
   playButton.draw();
+
+  if(hasWon || hasLost) nextButton.draw();
 }
 
 function windowResized() {
@@ -716,74 +817,13 @@ function windowResized() {
   }
 
   playButton.update();
+
+  nextButton.update();
 }
 
 function keyPressed() {
-  console.log(keyCode);
-  switch(keyCode) {
-    case 49:
-    setInstruments();
-    break;
-    case 50:
-    setNumBut(2);
-    setInstruments();
-    break;
-    case 51:
-    setNumBut(3);
-    setInstruments();
-    break;
-    case 52:
-    setNumBut(4);
-    setInstruments();
-    break;
-    case 53:
-    setNumBut(5);
-    setInstruments();
-    break;
-    case 54:
-    setNumBut(6);
-    setInstruments();
-    break;
-    case 55:
-    setNumBut(7);
-    setInstruments();
-    break;
-    case 56:
-    setNumBut(8);
-    setInstruments();
-    break;
-    case 57:
-    setNumBut(9);
-    setInstruments();
-    break;
-    case 81:
-    setNumBut(10);
-    setInstruments();
-    break;
-    case 87:
-    setNumBut(11);
-    setInstruments();
-    break;
-    case 69:
-    setNumBut(12);
-    setInstruments();
-    break;
-    case 82:
-    setNumBut(13);
-    setInstruments();
-    break;
-    case 84:
-    setNumBut(14);
-    setInstruments();
-    break;
-    case 90:
-    setNumBut(15);
-    setInstruments();
-    break;
-    case 85:
-    setNumBut(16);
-    setInstruments();
-    break;
+  if((keyCode == 13 || keyCode == 32) && (hasWon || hasLost)) {
+    nextLevel();
   }
 
   return false;
