@@ -465,17 +465,23 @@ class ClasButton {
 
   update() {
     let x, y, w, xMax;
-    let yMax = 2;
+    let yMax = 3;
     let h = 5*dimension*(1/4-0.01)/8;
-    if(this.pos < 4) {
-      x = this.pos;
+    if(!this.pos) {
+      x = 0;
       y = 0;
+      w = 32*h/5;
+      xMax = 1;
+    }
+    else if(this.pos < 5) {
+      x = this.pos-1;
+      y = 1;
       w = 8*h/5;
       xMax = 4;
     }
     else {
-      x = this.pos-4;
-      y = 1;
+      x = this.pos-5;
+      y = 2;
       w = 4*h/5;
       xMax = 8;
     }
@@ -1039,18 +1045,19 @@ function setup() {
 
   setInstruments();
 
-  classes.push(new ClasButton('cordes',0,7,0));
-  classes.push(new ClasButton('vents',8,18,1));
-  classes.push(new ClasButton('claviers',19,22,2));
-  classes.push(new ClasButton('percussions',23,27,3));
-  classes.push(new ClasButton('frottées',0,3,4));
-  classes.push(new ClasButton('pincées',4,7,5));
-  classes.push(new ClasButton('bois',8,13,6));
-  classes.push(new ClasButton('cuivres',14,17,7));
-  classes.push(new ClasButton('cordes',19,20,8));
-  classes.push(new ClasButton('vent',21,22,9));
-  classes.push(new ClasButton('peaux',23,24,10));
-  classes.push(new ClasButton('lames',25,27,11));
+  classes.push(new ClasButton('tout',       0, 27,0 ));
+  classes.push(new ClasButton('cordes',     0, 7, 1 ));
+  classes.push(new ClasButton('vents',      8, 18,2 ));
+  classes.push(new ClasButton('claviers',   19,22,3 ));
+  classes.push(new ClasButton('percussions',23,27,4 ));
+  classes.push(new ClasButton('frottées',   0, 3, 5 ));
+  classes.push(new ClasButton('pincées',    4, 7, 6 ));
+  classes.push(new ClasButton('bois',       8, 13,7 ));
+  classes.push(new ClasButton('cuivres',    14,17,8 ));
+  classes.push(new ClasButton('cordes',     19,20,9 ));
+  classes.push(new ClasButton('vent',       21,22,10));
+  classes.push(new ClasButton('peaux',      23,24,11));
+  classes.push(new ClasButton('lames',      25,27,12));
 }
 
 function draw() {
