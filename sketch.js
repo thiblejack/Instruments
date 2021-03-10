@@ -13,7 +13,16 @@ var playButton;
 var playSymbol;
 
 var nextButton;
-var nextSymbol;
+
+var menuButton;
+var inMenu = false;
+
+var classes = [];
+
+var rangeA = 0;
+var rangeB = 27;
+
+var quitButton;
 
 var hasWon = false;
 var hasLost = false;
@@ -149,9 +158,8 @@ class Button {
   }
 }
 
-
 class PlayButton {
-  constructor(b) {
+  constructor() {
     this.hover = false;
     this.press = false;
     this.instrument = -1;
@@ -241,7 +249,7 @@ class PlayButton {
 }
 
 class NextButton {
-  constructor(b) {
+  constructor() {
     this.hover = false;
     this.press = false;
 
@@ -299,7 +307,9 @@ class NextButton {
     let y = this.button.y;
     let w = this.button.width;
     let h = this.button.height;
-    image(nextSymbol,x,y,w,h);
+    fill(black);
+    let margin = 0.15*w;
+    triangle(x+margin,y+margin,x+margin,y+h-margin,x+w-margin,y+h/2);
     if(this.press) {
       fill(white);
       rect(x,y,w,h);
@@ -315,6 +325,272 @@ class NextButton {
       textSize(0.025*dimension);
       textAlign(CENTER);
       text('suivant',x+w/2,y+h/2-0.005*dimension);
+    }
+  }
+}
+
+class MenuButton {
+  constructor() {
+    this.hover = false;
+    this.press = false;
+
+    this.button = new Clickable();
+    this.button.color = white;
+    this.button.cornerRadius = 0;
+    this.button.text = '';
+
+    let button = this;
+
+    this.button.onHover = function() {
+      if(isMobile.any()) return;
+      else if(!button.hover) {
+        button.hover = true;
+        cursor(HAND);
+      }
+    }
+
+    this.button.onOutside = function() {
+      if(isMobile.any()) return;
+      else if(button.hover) {
+        button.hover = false;
+        button.press = false;
+        cursor(ARROW);
+      }
+    }
+
+    this.button.onPress = function() {
+      button.press = true;
+    }
+
+    this.button.onRelease = function() {
+      button.press = false;
+      inMenu = true;
+    }
+
+    this.update();
+  }
+
+  update() {
+    let x = width/2+0.28*dimension;
+    let y = height/2+0.4*dimension;
+    let w = 0.08*dimension;
+    let h = w;
+    this.button.locate(x-w/2,
+                       y-h/2);
+    this.button.width = w;
+    this.button.height = h;
+    this.button.strokeWeight = 0;
+  }
+
+  draw() {
+    this.button.draw();
+    let x = this.button.x;
+    let y = this.button.y;
+    let w = this.button.width;
+    let h = this.button.height;
+    fill(black);
+    let margin = 0.13*w;
+    let h2 = (h-6*margin)/3;
+    rect(x+margin,y+2*margin,w-2*margin,h2);
+    rect(x+margin,y+3*margin+h2,w-2*margin,h2);
+    rect(x+margin,y+4*margin+2*h2,w-2*margin,h2);
+    if(this.press) {
+      fill(white);
+      rect(x,y,w,h);
+    }
+    else if(this.hover) {
+      erase(180,0);
+      rect(x,y,w,h);
+      noErase();
+    }
+    if(this.press || this.hover) {
+      fill(black);
+      textFont(fontL);
+      textSize(0.025*dimension);
+      textAlign(CENTER);
+      text('menu',x+w/2,y+h/2-0.005*dimension);
+    }
+  }
+}
+
+class ClasButton {
+  constructor(name,a,b,pos) {
+    this.name = name;
+    this.a = a;
+    this.b = b;
+    this.pos = pos;
+
+    this.hover = false;
+    this.press = false;
+
+    this.button = new Clickable();
+    this.button.color = white;
+    this.button.cornerRadius = 0;
+    this.button.text = '';
+
+    let button = this;
+
+    this.button.onHover = function() {
+      if(isMobile.any()) return;
+      else if(!button.hover) {
+        button.hover = true;
+        cursor(HAND);
+      }
+    }
+
+    this.button.onOutside = function() {
+      if(isMobile.any()) return;
+      else if(button.hover) {
+        button.hover = false;
+        button.press = false;
+        cursor(ARROW);
+      }
+    }
+
+    this.button.onPress = function() {
+      button.press = true;
+    }
+
+    this.button.onRelease = function() {
+      button.press = false;
+      level = 0;
+      rangeA = button.a;
+      rangeB = button.b;
+      nextLevel();
+      inMenu = false;
+    }
+
+    this.update();
+  }
+
+  update() {
+    let x, y, w, xMax;
+    let yMax = 2;
+    let h = 5*dimension*(1/4-0.01)/8;
+    if(this.pos < 4) {
+      x = this.pos;
+      y = 0;
+      w = 8*h/5;
+      xMax = 4;
+    }
+    else {
+      x = this.pos-4;
+      y = 1;
+      w = 4*h/5;
+      xMax = 8;
+    }
+    let margin = 0.007*dimension;
+    this.button.locate(width/2+(x-xMax/2)*w+margin,
+                       height/2+(y-yMax/2)*h+margin);
+    this.button.width = w-2*margin;
+    this.button.height = h-2*margin;
+    this.button.strokeWeight = 0;
+  }
+
+  draw() {
+    this.button.draw();
+    let x = this.button.x;
+    let y = this.button.y;
+    let w = this.button.width;
+    let h = this.button.height;
+    fill(black);
+    textFont(fontL);
+    textSize(0.025*dimension);
+    textAlign(CENTER);
+    text(this.name,x+w/2,y+h/2-0.005*dimension);
+    if(this.hover) {
+      erase(180,0);
+      rect(x,y,w,h);
+      noErase();
+    }
+    noFill();
+    stroke(black);
+    strokeWeight(0.003*dimension);
+    rect(x,y,w,h);
+  }
+}
+
+class QuitButton {
+  constructor() {
+    this.hover = false;
+    this.press = false;
+
+    this.button = new Clickable();
+    this.button.color = white;
+    this.button.cornerRadius = 0;
+    this.button.text = '';
+
+    let button = this;
+
+    this.button.onHover = function() {
+      if(isMobile.any()) return;
+      else if(!button.hover) {
+        button.hover = true;
+        cursor(HAND);
+      }
+    }
+
+    this.button.onOutside = function() {
+      if(isMobile.any()) return;
+      else if(button.hover) {
+        button.hover = false;
+        button.press = false;
+        cursor(ARROW);
+      }
+    }
+
+    this.button.onPress = function() {
+      button.press = true;
+    }
+
+    this.button.onRelease = function() {
+      button.press = false;
+      inMenu = false;
+    }
+
+    this.update();
+  }
+
+  update() {
+    let x = width/2;
+    let y = height/2+0.4*dimension;
+    let w = 0.08*dimension;
+    let h = w;
+    this.button.locate(x-w/2,
+                       y-h/2);
+    this.button.width = w;
+    this.button.height = h;
+    this.button.strokeWeight = 0;
+  }
+
+  draw() {
+    this.button.draw();
+    let x = this.button.x;
+    let y = this.button.y;
+    let w = this.button.width;
+    let h = this.button.height;
+    let margin = 0.2*w;
+    let h2 = (h-6*0.13*w)/3;
+    stroke(black);
+    strokeWeight(h2);
+    line(x+margin,y+margin,x+w-margin,y+h-margin);
+    line(x+margin,y+w-margin,x+w-margin,y+margin);
+    noStroke();
+    if(this.press) {
+      fill(white);
+      rect(x,y,w,h);
+    }
+    else if(this.hover) {
+      erase(180,0);
+      rect(x,y,w,h);
+      noErase();
+    }
+    if(this.press || this.hover) {
+      fill(black);
+      textFont(fontL);
+      textSize(0.025*dimension);
+      textAlign(CENTER);
+      text('retour',x+w/2,y+h/2-0.005*dimension);
     }
   }
 }
@@ -349,8 +625,8 @@ function setNumBut(nB) {
 function setInstruments() {
   stopSound();
   let i, i0, i1;
-  i0 = 0;
-  i1 = images.length;
+  i0 = rangeA;
+  i1 = rangeB+1;
   let same = true;
   for(let b = 0; b < numBut; b++) {
     while(same) {
@@ -364,7 +640,10 @@ function setInstruments() {
     same = true;
   }
 
-  i = buttons[floor(random(numBut))].instrument;
+  i = playButton.instrument;
+  while(i == playButton.instrument) {
+    i = buttons[floor(random(numBut))].instrument;
+  }
   playButton.setInstrument(i);
 
   hasWon = false;
@@ -376,7 +655,9 @@ function stopSound() {
 }
 
 function nextLevel() {
-  setNumBut(level+2 > 16 ? 16 : level+2);
+  let max = rangeB-rangeA+1;
+  max = max > 16 ? 16 : max;
+  setNumBut(level+2 > max ? max : level+2);
   setInstruments();
 }
 
@@ -400,8 +681,6 @@ function preload() {
   fontL = loadFont('light.otf');
 
   playSymbol = loadImage('play-symbol.png');
-
-  nextSymbol = loadImage('next-symbol.png');
 
   soundFormats('mp3');
 
@@ -742,6 +1021,8 @@ function setup() {
 
   dimension = Math.min(width, height);
 
+  strokeCap(SQUARE);
+
   setNumBut(2);
 
   for(let b = 0; b < numButMax; b++) {
@@ -752,7 +1033,24 @@ function setup() {
 
   nextButton = new NextButton();
 
+  menuButton = new MenuButton();
+
+  quitButton = new QuitButton();
+
   setInstruments();
+
+  classes.push(new ClasButton('cordes',0,7,0));
+  classes.push(new ClasButton('vents',8,18,1));
+  classes.push(new ClasButton('claviers',19,22,2));
+  classes.push(new ClasButton('percussions',23,27,3));
+  classes.push(new ClasButton('frottées',0,3,4));
+  classes.push(new ClasButton('pincées',4,7,5));
+  classes.push(new ClasButton('bois',8,13,6));
+  classes.push(new ClasButton('cuivres',14,17,7));
+  classes.push(new ClasButton('cordes',19,20,8));
+  classes.push(new ClasButton('vent',21,22,9));
+  classes.push(new ClasButton('peaux',23,24,10));
+  classes.push(new ClasButton('lames',25,27,11));
 }
 
 function draw() {
@@ -765,46 +1063,55 @@ function draw() {
   textAlign(CENTER);
   text('Jeu des Instruments', width/2,height/2-0.4*dimension);
 
-  textSize(0.05*dimension);
-  textAlign(LEFT);
-  text('Score : '+level, width/2-0.375*dimension,height/2+0.39*dimension);
-
-  textAlign(CENTER);
-
-  if(hasWon) {
-    textSize(0.05*dimension);
-    text('Bravo !', width/2,height/2);
-  }
-  else if(hasLost) {
-    textSize(0.05*dimension);
-    let i = playButton.instrument;
-    let determinant;
-    switch(i) {
-      case 3:
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-      case 8:
-      case 9:
-      case 10:
-      case 15:
-      case 23: determinant = 'une'; break;
-      case 18: determinant = 'du'; break;
-      case 24: determinant = 'des'; break;
-      default: determinant = 'un';
+  if(inMenu) {
+    quitButton.draw();
+    for(let c = 0; c < classes.length; c++) {
+      classes[c].draw();
     }
-    text("Oups, c'est raté...\nC'était "+determinant+" "+instruments[i]+" !", width/2,height/2);
   }
   else {
-    for(let b = 0; b < numBut; b++) {
-      buttons[b].draw();
+    textSize(0.05*dimension);
+    textAlign(LEFT);
+    text('Score : '+level, width/2-0.375*dimension,height/2+0.39*dimension);
+
+    textAlign(CENTER);
+
+    if(hasWon) {
+      textSize(0.05*dimension);
+      text('Bravo !', width/2,height/2);
     }
+    else if(hasLost) {
+      textSize(0.05*dimension);
+      let i = playButton.instrument;
+      let determinant;
+      switch(i) {
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 15:
+        case 23: determinant = 'une'; break;
+        case 18: determinant = 'du'; break;
+        case 24: determinant = 'des'; break;
+        default: determinant = 'un';
+      }
+      text("Oups, c'est raté...\nC'était "+determinant+" "+instruments[i]+" !", width/2,height/2);
+    }
+    else {
+      for(let b = 0; b < numBut; b++) {
+        buttons[b].draw();
+      }
+    }
+
+    playButton.draw();
+
+    if(hasWon || hasLost) nextButton.draw();
+    else menuButton.draw();
   }
-
-  playButton.draw();
-
-  if(hasWon || hasLost) nextButton.draw();
 }
 
 function windowResized() {
@@ -819,6 +1126,14 @@ function windowResized() {
   playButton.update();
 
   nextButton.update();
+
+  menuButton.update();
+
+  quitButton.update();
+
+  for(let c = 0; c < classes.length; c++) {
+    classes[c].update();
+  }
 }
 
 function keyPressed() {
