@@ -19,6 +19,7 @@ var inMenu = false;
 
 var classes = [];
 
+var instrumentClass = 0;
 var rangeA = 0;
 var rangeB = 27;
 
@@ -456,6 +457,7 @@ class ClasButton {
       level = 0;
       rangeA = button.a;
       rangeB = button.b;
+      instrumentClass = button.pos;
       nextLevel();
       inMenu = false;
     }
@@ -674,7 +676,7 @@ function checkAnswer(i) {
 
 function win() {
   hasWon = true;
-  level++;
+  if(!instrumentClass) level++;
 }
 
 function loose() {
@@ -1077,11 +1079,37 @@ function draw() {
     }
   }
   else {
-    textSize(0.05*dimension);
-    textAlign(LEFT);
-    text('Score : '+level, width/2-0.375*dimension,height/2+0.39*dimension);
-
-    textAlign(CENTER);
+    let c = instrumentClass;
+    if(c) {
+      let name;
+      switch(c) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 7:
+        case 8:
+        name = classes[c].name;
+        break;
+        case 5:
+        case 6:
+        name = classes[1].name+classes[c].name;
+        break;
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        name = classes[floor((c-3)/2)].name+' à '+classes[c].name;
+      }
+      textSize(0.03*dimension);
+      text(name, width/2-0.28*dimension,height/2+0.393*dimension);
+    }
+    else {
+      textSize(0.05*dimension);
+      textAlign(LEFT);
+      text('Score : '+level, width/2-0.375*dimension,height/2+0.39*dimension);
+      textAlign(CENTER);
+    }
 
     if(hasWon) {
       textSize(0.05*dimension);
