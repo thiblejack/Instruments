@@ -1070,7 +1070,7 @@ function draw() {
   textFont(fontM);
   textSize(0.075*dimension);
   textAlign(CENTER);
-  text('Jeu des Instruments', width/2,height/2-0.4*dimension);
+  text('Jeu des instruments', width/2,height/2-0.4*dimension);
 
   if(inMenu) {
     quitButton.draw();
@@ -1093,7 +1093,7 @@ function draw() {
         break;
         case 5:
         case 6:
-        name = classes[1].name+classes[c].name;
+        name = classes[1].name+' '+classes[c].name;
         break;
         case 9:
         case 10:
