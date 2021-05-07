@@ -1182,6 +1182,13 @@ function draw() {
     if(hasWon || hasLost) nextButton.draw();
     else menuButton.draw();
   }
+
+  textSize(100);
+  fill(black);
+  noStroke();
+  textAlign(CENTER,CENTER);
+  textFont(fontL);
+  text(String(level),0,0,width,height);
 }
 
 function windowResized() {
