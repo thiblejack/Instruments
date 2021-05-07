@@ -676,7 +676,7 @@ function checkAnswer(i) {
 
 function win() {
   hasWon = true;
-  if(!instrumentClass) level++;
+  level++;
 }
 
 function loose() {
@@ -703,6 +703,10 @@ function preload() {
   temp.push(loadImage('images/violon-carrousel-02.jpg'));
   temp.push(loadImage('images/violon-carrousel-03.jpg'));
   temp.push(loadImage('images/violon-carrousel-04.jpg'));
+  temp.push(loadImage('images/violon-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/violon-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/violon-jazz-carrousel-03.jpg'));
+  temp.push(loadImage('images/violon-jazz-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('violon');
 
@@ -738,6 +742,9 @@ function preload() {
   temp.push(loadImage('images/contrebasse-carrousel-02.jpg'));
   temp.push(loadImage('images/contrebasse-carrousel-03.jpg'));
   temp.push(loadImage('images/contrebasse-carrousel-04.jpg'));
+  temp.push(loadImage('images/contrebasse-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/contrebasse-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/contrebasse-jazz-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('contrebasse');
 
@@ -755,10 +762,10 @@ function preload() {
   temp.push(loadSound('sounds/guitare-elec'));
   sounds.push(temp);
   temp = [];
-  temp.push(loadImage('images/guitarer-elec-carrousel-01.jpg'));
-  temp.push(loadImage('images/guitarer-elec-carrousel-02.jpg'));
-  temp.push(loadImage('images/guitarer-elec-carrousel-03.jpg'));
-  temp.push(loadImage('images/guitarer-elec-carrousel-04.jpg'));
+  temp.push(loadImage('images/guitare-elec-carrousel-01.jpg'));
+  temp.push(loadImage('images/guitare-elec-carrousel-02.jpg'));
+  temp.push(loadImage('images/guitare-elec-carrousel-03.jpg'));
+  temp.push(loadImage('images/guitare-elec-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('guitare électrique');
 
@@ -804,6 +811,9 @@ function preload() {
   temp.push(loadImage('images/flute-trav-carrousel-02.jpg'));
   temp.push(loadImage('images/flute-trav-carrousel-03.jpg'));
   temp.push(loadImage('images/flute-trav-carrousel-04.jpg'));
+  temp.push(loadImage('images/flute-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/flute-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/flute-jazz-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('flûte traversière');
 
@@ -849,6 +859,9 @@ function preload() {
   temp.push(loadImage('images/saxophone-carrousel-01.jpg'));
   temp.push(loadImage('images/saxophone-carrousel-02.jpg'));
   temp.push(loadImage('images/saxophone-carrousel-03.jpg'));
+  temp.push(loadImage('images/saxophone-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/saxophone-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/saxophone-jazz-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('saxophone');
 
@@ -872,6 +885,10 @@ function preload() {
   temp.push(loadImage('images/trompette-carrousel-02.jpg'));
   temp.push(loadImage('images/trompette-carrousel-03.jpg'));
   temp.push(loadImage('images/trompette-carrousel-04.jpg'));
+  temp.push(loadImage('images/trompette-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/trompette-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/trompette-jazz-carrousel-03.jpg'));
+  temp.push(loadImage('images/trompette-jazz-carrousel-04.jpg'));
   images.push(temp);
   instruments.push('trompette');
 
@@ -906,13 +923,15 @@ function preload() {
   temp.push(loadImage('images/chant-carrousel-02.jpg'));
   temp.push(loadImage('images/chant-carrousel-03.jpg'));
   temp.push(loadImage('images/chant-carrousel-04.jpg'));
+  temp.push(loadImage('images/chant-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/chant-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/chant-jazz-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('chant');
 
   temp = [];
   temp.push(loadSound('sounds/piano'));
   temp.push(loadSound('sounds/piano-jazz'));
-  temp.push(loadSound('sounds/piano-elec-jazz'));
   sounds.push(temp);
   temp = [];
   temp.push(loadImage('images/piano-carrousel-01.jpg'));
@@ -925,6 +944,16 @@ function preload() {
   temp.push(loadImage('images/piano-carrousel-b-04.jpg'));
   images.push(temp);
   instruments.push('piano');
+
+  temp = [];
+  temp.push(loadSound('sounds/piano-elec-jazz'));
+  sounds.push(temp);
+  temp = [];
+  temp.push(loadImage('images/clavier-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/clavier-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/clavier-jazz-carrousel-03.jpg'));
+  images.push(temp);
+  instruments.push('piano électrique');
 
   temp = [];
   temp.push(loadSound('sounds/clavecin'));
@@ -970,6 +999,9 @@ function preload() {
   temp.push(loadImage('images/batterie-carrousel-03.jpg'));
   temp.push(loadImage('images/batterie-carrousel-04.jpg'));
   temp.push(loadImage('images/batterie-carrousel-05.jpg'));
+  temp.push(loadImage('images/batterie-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/batterie-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/batterie-jazz-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('batterie');
 
@@ -1003,6 +1035,9 @@ function preload() {
   temp.push(loadImage('images/vibraphone-carrousel-01.jpg'));
   temp.push(loadImage('images/vibraphone-carrousel-02.jpg'));
   temp.push(loadImage('images/vibraphone-carrousel-03.jpg'));
+  temp.push(loadImage('images/vibraphone-jazz-carrousel-01.jpg'));
+  temp.push(loadImage('images/vibraphone-jazz-carrousel-02.jpg'));
+  temp.push(loadImage('images/vibraphone-jazz-carrousel-03.jpg'));
   images.push(temp);
   instruments.push('vibraphone');
 
@@ -1047,19 +1082,19 @@ function setup() {
 
   setInstruments();
 
-  classes.push(new ClasButton('tout',       0, 27,0 ));
+  classes.push(new ClasButton('tout',       0, 28,0 ));
   classes.push(new ClasButton('cordes',     0, 7, 1 ));
   classes.push(new ClasButton('vents',      8, 18,2 ));
   classes.push(new ClasButton('claviers',   19,22,3 ));
-  classes.push(new ClasButton('percussions',23,27,4 ));
+  classes.push(new ClasButton('percussions',24,28,4 ));
   classes.push(new ClasButton('frottées',   0, 3, 5 ));
   classes.push(new ClasButton('pincées',    4, 7, 6 ));
   classes.push(new ClasButton('bois',       8, 13,7 ));
   classes.push(new ClasButton('cuivres',    14,17,8 ));
-  classes.push(new ClasButton('cordes',     19,20,9 ));
-  classes.push(new ClasButton('vent',       21,22,10));
-  classes.push(new ClasButton('peaux',      23,24,11));
-  classes.push(new ClasButton('lames',      25,27,12));
+  classes.push(new ClasButton('cordes',     19,21,9 ));
+  classes.push(new ClasButton('vent',       22,23,10));
+  classes.push(new ClasButton('peaux',      24,25,11));
+  classes.push(new ClasButton('lames',      26,28,12));
 }
 
 function draw() {
