@@ -1304,7 +1304,6 @@ function mousePressed() {
   return false;
 }
 
-/*function touchStarted() {
-  console.log('touch');
-  return false;
-}*/
+function touchStarted() {
+  return mousePressed();
+}
