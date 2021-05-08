@@ -166,7 +166,9 @@ class Button {
     if(mouseX > this.x && mouseX < this.x+this.w &&
        mouseY > this.y && mouseY < this.y+this.h) {
       checkAnswer(this.instrument);
+      return true;
     }
+    return false;
   }
 }
 
@@ -267,7 +269,9 @@ class PlayButton {
     if(mouseX > this.x && mouseX < this.x+this.w &&
        mouseY > this.y && mouseY < this.y+this.h) {
       this.playSound();
+      return true;
     }
+    return false;
   }
 }
 
@@ -359,7 +363,9 @@ class NextButton {
     if(mouseX > this.x && mouseX < this.x+this.w &&
        mouseY > this.y && mouseY < this.y+this.h) {
       nextLevel();
+      return true;
     }
+    return false;
   }
 }
 
@@ -455,7 +461,9 @@ class MenuButton {
     if(mouseX > this.x && mouseX < this.x+this.w &&
        mouseY > this.y && mouseY < this.y+this.h) {
       inMenu = true;
+      return true;
     }
+    return false;
   }
 }
 
@@ -576,7 +584,9 @@ class ClasButton {
       instrumentClass = this.pos;
       nextLevel();
       inMenu = false;
+      return true;
     }
+    return false;
   }
 }
 
@@ -672,7 +682,9 @@ class QuitButton {
     if(mouseX > this.x && mouseX < this.x+this.w &&
        mouseY > this.y && mouseY < this.y+this.h) {
       inMenu = false;
+      return true;
     }
+    return false;
   }
 }
 
@@ -1290,20 +1302,17 @@ function keyPressed() {
 function mousePressed() {
   if(inMenu) {
     for(let c in classes) {
-      classes[c].checkIfTouched();
+      if(classes[c].checkIfTouched()) return;
     }
-    quitButton.checkIfTouched();
+    if(quitButton.checkIfTouched()) return;
   } else {
     for(let b in buttons) {
-      buttons[b].checkIfTouched();
+      if(buttons[b].checkIfTouched()) return;
     }
-    playButton.checkIfTouched();
-    nextButton.checkIfTouched();
-    menuButton.checkIfTouched();
+    if(playButton.checkIfTouched()) return;
+    if(hasWon || hasLost) {
+      if(nextButton.checkIfTouched()) return;
+    } else if(menuButton.checkIfTouched()) return;
   }
   return false;
-}
-
-function touchStarted() {
-  return mousePressed();
 }
