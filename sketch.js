@@ -62,7 +62,7 @@ class Button {
     this.press = false;
     this.instrument = -1;
 
-    this.button = new Clickable();
+    /*this.button = new Clickable();
     this.button.color = white;
     this.button.cornerRadius = 0;
     this.button.text = '';
@@ -93,7 +93,7 @@ class Button {
     this.button.onRelease = function() {
       button.press = false;
       checkAnswer(button.instrument);
-    }
+    }*/
 
     if(this.pos < numBut) this.update();
   }
@@ -120,22 +120,26 @@ class Button {
     let w = dimension*(1/layout[0]-0.01);
     let h = 5*w/8;
     let margin = 0.007*dimension;
-    this.button.locate(width/2+(x-xMax/2)*w+margin,
+    this.x = width/2+(x-xMax/2)*w+margin;
+    this.y = height/2+(y-yMax/2)*h+margin;
+    this.w = w-2*margin;
+    this.h = h-2*margin;
+    /*this.button.locate(width/2+(x-xMax/2)*w+margin,
                        height/2+(y-yMax/2)*h+margin);
     this.button.width = w-2*margin;
     this.button.height = h-2*margin;
-    this.button.strokeWeight = 0;
+    this.button.strokeWeight = 0;*/
   }
 
   draw() {
-    this.button.draw();
-    let x = this.button.x;
-    let y = this.button.y;
-    let w = this.button.width;
-    let h = this.button.height;
+    //this.button.draw();
+    let x = this.x;//button.x;
+    let y = this.y;//button.y;
+    let w = this.w;//button.width;
+    let h = this.h;//button.height;
     if(this.instrument >= 0) {
       image(images[this.instrument][this.version],x,y,w,h);
-      if(this.press) {
+      /*if(this.press) {
         fill(white);
         rect(x,y,w,h);
       }
@@ -150,12 +154,19 @@ class Button {
         textSize(0.1*dimension/layout[0]);
         textAlign(CENTER);
         text(instruments[this.instrument],x+w/2,y+h/2-0.007*dimension);
-      }
+      }*/
     }
     noFill();
     stroke(black);
     strokeWeight(0.003*dimension);
     rect(x,y,w,h);
+  }
+
+  checkIfTouched() {
+    if(mouseX > this.x && mouseX < this.x+this.w &&
+       mouseY > this.y && mouseY < this.y+this.h) {
+      checkAnswer(this.instrument);
+    }
   }
 }
 
@@ -165,7 +176,7 @@ class PlayButton {
     this.press = false;
     this.instrument = -1;
 
-    this.button = new Clickable();
+    /*this.button = new Clickable();
     this.button.color = white;
     this.button.cornerRadius = 0;
     this.button.text = '';
@@ -196,7 +207,7 @@ class PlayButton {
 
     this.button.onRelease = function() {
       button.press = false;
-    }
+    }*/
 
     this.update();
   }
@@ -216,21 +227,25 @@ class PlayButton {
     let y = height/2+0.4*dimension;
     let w = 0.08*dimension;
     let h = w;
-    this.button.locate(x-w/2,
+    this.x = x-w/2;
+    this.y = y-h/2;
+    this.w = w;
+    this.h = h;
+    /*this.button.locate(x-w/2,
                        y-h/2);
     this.button.width = w;
     this.button.height = h;
-    this.button.strokeWeight = 0;
+    this.button.strokeWeight = 0;*/
   }
 
   draw() {
-    this.button.draw();
-    let x = this.button.x;
-    let y = this.button.y;
-    let w = this.button.width;
-    let h = this.button.height;
+    //this.button.draw();
+    let x = this.x;//button.x;
+    let y = this.y;//button.y;
+    let w = this.w;//button.width;
+    let h = this.h;//button.height;
     image(playSymbol,x,y,w,h);
-    if(this.press) {
+    /*if(this.press) {
       fill(white);
       rect(x,y,w,h);
     }
@@ -245,6 +260,13 @@ class PlayButton {
       textSize(0.025*dimension);
       textAlign(CENTER);
       text('écouter',x+w/2,y+h/2-0.005*dimension);
+    }*/
+  }
+
+  checkIfTouched() {
+    if(mouseX > this.x && mouseX < this.x+this.w &&
+       mouseY > this.y && mouseY < this.y+this.h) {
+      this.playSound();
     }
   }
 }
@@ -254,7 +276,7 @@ class NextButton {
     this.hover = false;
     this.press = false;
 
-    this.button = new Clickable();
+    /*this.button = new Clickable();
     this.button.color = white;
     this.button.cornerRadius = 0;
     this.button.text = '';
@@ -285,7 +307,7 @@ class NextButton {
     this.button.onRelease = function() {
       button.press = false;
       nextLevel();
-    }
+    }*/
 
     this.update();
   }
@@ -295,23 +317,27 @@ class NextButton {
     let y = height/2+0.4*dimension;
     let w = 0.08*dimension;
     let h = w;
-    this.button.locate(x-w/2,
+    this.x = x-w/2;
+    this.y = y-h/2;
+    this.w = w;
+    this.h = h;
+    /*this.button.locate(x-w/2,
                        y-h/2);
     this.button.width = w;
     this.button.height = h;
-    this.button.strokeWeight = 0;
+    this.button.strokeWeight = 0;*/
   }
 
   draw() {
-    this.button.draw();
-    let x = this.button.x;
-    let y = this.button.y;
-    let w = this.button.width;
-    let h = this.button.height;
+    //this.button.draw();
+    let x = this.x;//button.x;
+    let y = this.y;//button.y;
+    let w = this.w;//button.width;
+    let h = this.h;//button.height;
     fill(black);
     let margin = 0.15*w;
     triangle(x+margin,y+margin,x+margin,y+h-margin,x+w-margin,y+h/2);
-    if(this.press) {
+    /*if(this.press) {
       fill(white);
       rect(x,y,w,h);
     }
@@ -326,6 +352,13 @@ class NextButton {
       textSize(0.025*dimension);
       textAlign(CENTER);
       text('suivant',x+w/2,y+h/2-0.005*dimension);
+    }*/
+  }
+
+  checkIfTouched() {
+    if(mouseX > this.x && mouseX < this.x+this.w &&
+       mouseY > this.y && mouseY < this.y+this.h) {
+      nextLevel();
     }
   }
 }
@@ -335,7 +368,7 @@ class MenuButton {
     this.hover = false;
     this.press = false;
 
-    this.button = new Clickable();
+    /*this.button = new Clickable();
     this.button.color = white;
     this.button.cornerRadius = 0;
     this.button.text = '';
@@ -366,7 +399,7 @@ class MenuButton {
     this.button.onRelease = function() {
       button.press = false;
       inMenu = true;
-    }
+    }*/
 
     this.update();
   }
@@ -376,26 +409,31 @@ class MenuButton {
     let y = height/2+0.4*dimension;
     let w = 0.08*dimension;
     let h = w;
-    this.button.locate(x-w/2,
+    this.x = x-w/2;
+    this.y = y-h/2;
+    this.w = w;
+    this.h = h;
+    /*this.button.locate(x-w/2,
                        y-h/2);
     this.button.width = w;
     this.button.height = h;
-    this.button.strokeWeight = 0;
+    this.button.strokeWeight = 0;*/
   }
 
   draw() {
-    this.button.draw();
-    let x = this.button.x;
-    let y = this.button.y;
-    let w = this.button.width;
-    let h = this.button.height;
+    //this.button.draw();
+    let x = this.x;//button.x;
+    let y = this.y;//button.y;
+    let w = this.w;//button.width;
+    let h = this.h;//button.height;
     fill(black);
+    noStroke();
     let margin = 0.13*w;
     let h2 = (h-6*margin)/3;
     rect(x+margin,y+2*margin,w-2*margin,h2);
     rect(x+margin,y+3*margin+h2,w-2*margin,h2);
     rect(x+margin,y+4*margin+2*h2,w-2*margin,h2);
-    if(this.press) {
+    /*if(this.press) {
       fill(white);
       rect(x,y,w,h);
     }
@@ -410,6 +448,13 @@ class MenuButton {
       textSize(0.025*dimension);
       textAlign(CENTER);
       text('menu',x+w/2,y+h/2-0.005*dimension);
+    }*/
+  }
+
+  checkIfTouched() {
+    if(mouseX > this.x && mouseX < this.x+this.w &&
+       mouseY > this.y && mouseY < this.y+this.h) {
+      inMenu = true;
     }
   }
 }
@@ -424,7 +469,7 @@ class ClasButton {
     this.hover = false;
     this.press = false;
 
-    this.button = new Clickable();
+    /*this.button = new Clickable();
     this.button.color = white;
     this.button.cornerRadius = 0;
     this.button.text = '';
@@ -460,7 +505,7 @@ class ClasButton {
       instrumentClass = button.pos;
       nextLevel();
       inMenu = false;
-    }
+    }*/
 
     this.update();
   }
@@ -488,33 +533,50 @@ class ClasButton {
       xMax = 8;
     }
     let margin = 0.007*dimension;
-    this.button.locate(width/2+(x-xMax/2)*w+margin,
+    this.x = width/2+(x-xMax/2)*w+margin;
+    this.y = height/2+(y-yMax/2)*h+margin;
+    this.w = w-2*margin;
+    this.h = h-2*margin;
+    /*this.button.locate(width/2+(x-xMax/2)*w+margin,
                        height/2+(y-yMax/2)*h+margin);
     this.button.width = w-2*margin;
     this.button.height = h-2*margin;
-    this.button.strokeWeight = 0;
+    this.button.strokeWeight = 0;*/
   }
 
   draw() {
-    this.button.draw();
-    let x = this.button.x;
-    let y = this.button.y;
-    let w = this.button.width;
-    let h = this.button.height;
+    //this.button.draw();
+    let x = this.x;//button.x;
+    let y = this.y;//button.y;
+    let w = this.w;//button.width;
+    let h = this.h;//button.height;
     fill(black);
+    noStroke();
     textFont(fontL);
     textSize(0.025*dimension);
     textAlign(CENTER);
     text(this.name,x+w/2,y+h/2-0.005*dimension);
-    if(this.hover) {
+    /*if(this.hover) {
       erase(180,0);
       rect(x,y,w,h);
       noErase();
-    }
+    }*/
     noFill();
     stroke(black);
     strokeWeight(0.003*dimension);
     rect(x,y,w,h);
+  }
+
+  checkIfTouched() {
+    if(mouseX > this.x && mouseX < this.x+this.w &&
+       mouseY > this.y && mouseY < this.y+this.h) {
+      level = 0;
+      rangeA = this.a;
+      rangeB = this.b;
+      instrumentClass = this.pos;
+      nextLevel();
+      inMenu = false;
+    }
   }
 }
 
@@ -523,7 +585,7 @@ class QuitButton {
     this.hover = false;
     this.press = false;
 
-    this.button = new Clickable();
+    /*this.button = new Clickable();
     this.button.color = white;
     this.button.cornerRadius = 0;
     this.button.text = '';
@@ -554,7 +616,7 @@ class QuitButton {
     this.button.onRelease = function() {
       button.press = false;
       inMenu = false;
-    }
+    }*/
 
     this.update();
   }
@@ -564,19 +626,23 @@ class QuitButton {
     let y = height/2+0.4*dimension;
     let w = 0.08*dimension;
     let h = w;
-    this.button.locate(x-w/2,
+    this.x = x-w/2;
+    this.y = y-h/2;
+    this.w = w;
+    this.h = h;
+    /*this.button.locate(x-w/2,
                        y-h/2);
     this.button.width = w;
     this.button.height = h;
-    this.button.strokeWeight = 0;
+    this.button.strokeWeight = 0;*/
   }
 
   draw() {
-    this.button.draw();
-    let x = this.button.x;
-    let y = this.button.y;
-    let w = this.button.width;
-    let h = this.button.height;
+    //this.button.draw();
+    let x = this.x;//button.x;
+    let y = this.y;//button.y;
+    let w = this.w;//button.width;
+    let h = this.h;//button.height;
     let margin = 0.2*w;
     let h2 = (h-6*0.13*w)/3;
     stroke(black);
@@ -584,7 +650,7 @@ class QuitButton {
     line(x+margin,y+margin,x+w-margin,y+h-margin);
     line(x+margin,y+w-margin,x+w-margin,y+margin);
     noStroke();
-    if(this.press) {
+    /*if(this.press) {
       fill(white);
       rect(x,y,w,h);
     }
@@ -599,6 +665,13 @@ class QuitButton {
       textSize(0.025*dimension);
       textAlign(CENTER);
       text('retour',x+w/2,y+h/2-0.005*dimension);
+    }*/
+  }
+
+  checkIfTouched() {
+    if(mouseX > this.x && mouseX < this.x+this.w &&
+       mouseY > this.y && mouseY < this.y+this.h) {
+      inMenu = false;
     }
   }
 }
@@ -1104,12 +1177,12 @@ function draw() {
   fill(black);
   textFont(fontM);
   textSize(0.075*dimension);
-  textAlign(CENTER);
+  textAlign(CENTER,CENTER);
   text('Jeu des instruments', width/2,height/2-0.4*dimension);
 
   if(inMenu) {
     quitButton.draw();
-    for(let c = 0; c < classes.length; c++) {
+    for(let c in classes) {
       classes[c].draw();
     }
   }
@@ -1141,7 +1214,7 @@ function draw() {
     }
     else {
       textSize(0.05*dimension);
-      textAlign(LEFT);
+      textAlign(LEFT,CENTER);
       text('Score : '+level, width/2-0.375*dimension,height/2+0.39*dimension);
       textAlign(CENTER);
     }
@@ -1213,3 +1286,25 @@ function keyPressed() {
 
   return false;
 }
+
+function mousePressed() {
+  if(inMenu) {
+    for(let c in classes) {
+      classes[c].checkIfTouched();
+    }
+    quitButton.checkIfTouched();
+  } else {
+    for(let b in buttons) {
+      buttons[b].checkIfTouched();
+    }
+    playButton.checkIfTouched();
+    nextButton.checkIfTouched();
+    menuButton.checkIfTouched();
+  }
+  return false;
+}
+
+/*function touchStarted() {
+  console.log('touch');
+  return false;
+}*/
