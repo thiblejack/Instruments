@@ -1317,6 +1317,10 @@ function mousePressed() {
   return false;
 }
 
+var lastTouched = 0;
+
 function touchStarted() {
+  if(millis() - lastTouched < 500) return false;
+  lastTouched = millis();
   return mousePressed();
 }
