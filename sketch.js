@@ -1299,7 +1299,11 @@ function keyPressed() {
   return false;
 }
 
+var lastTouched = 0;
+
 function mousePressed() {
+  if(millis() - lastTouched < 500) return false;
+  lastTouched = millis();
   if(inMenu) {
     for(let c in classes) {
       if(classes[c].checkIfTouched()) return;
@@ -1315,12 +1319,4 @@ function mousePressed() {
     } else if(menuButton.checkIfTouched()) return;
   }
   return false;
-}
-
-var lastTouched = 0;
-
-function touchStarted() {
-  if(millis() - lastTouched < 500) return false;
-  lastTouched = millis();
-  return mousePressed();
 }
