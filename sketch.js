@@ -1302,7 +1302,7 @@ function keyPressed() {
 var lastTouched = 0;
 
 function mousePressed() {
-  if(millis() - lastTouched < 500) return false;
+  if(millis() - lastTouched < 1000) return false;
   lastTouched = millis();
   if(inMenu) {
     for(let c in classes) {
