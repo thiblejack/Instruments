@@ -710,7 +710,7 @@ function setNumBut(nB) {
     default: console.log('error: numBut is wrong');
   }
 
-  for(b in buttons) {
+  for(b = 0; b < buttons.length; b++) {
     buttons[b].update();
   }
 }
@@ -1137,8 +1137,8 @@ function preload() {
   images.push(temp);
   instruments.push('xylophone');
 
-  for(let i in sounds) {
-    for(s in sounds[i]) {
+  for(let i = 0; i < sounds.length; i++) {
+    for(s = 0; s < sounds[i].length; s++) {
       sounds[i][s].playMode('restart');
     }
   }
@@ -1194,7 +1194,7 @@ function draw() {
 
   if(inMenu) {
     quitButton.draw();
-    for(let c in classes) {
+    for(let c = 0; c < classes.length; c++) {
       classes[c].draw();
     }
   }
@@ -1302,15 +1302,16 @@ function keyPressed() {
 var lastTouched = 0;
 
 function mousePressed() {
-  if(millis() - lastTouched < 1000) return false;
+  console.log('yup');
+  if(isMobile.any() && millis() - lastTouched < 1000) return false;
   lastTouched = millis();
   if(inMenu) {
-    for(let c in classes) {
+    for(let c = 0; c < classes.length; c++) {
       if(classes[c].checkIfTouched()) return;
     }
     if(quitButton.checkIfTouched()) return;
   } else {
-    for(let b in buttons) {
+    for(let b = 0; b < buttons.length; b++) {
       if(buttons[b].checkIfTouched()) return;
     }
     if(playButton.checkIfTouched()) return;
