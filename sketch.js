@@ -743,6 +743,25 @@ function setInstruments() {
   hasLost = false;
 }
 
+function determinant(i) {
+  switch(i) {
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 15:
+    case 24: return 'une';
+    case 18: return 'du';
+    case 25: return 'des';
+    default: return 'un';
+  }
+}
+
+
 function stopSound() {
   if(playButton.instrument >= 0) sounds[playButton.instrument][playButton.version].stop();
 }
@@ -1233,28 +1252,13 @@ function draw() {
 
     if(hasWon) {
       textSize(0.05*dimension);
-      text('Bravo !', width/2,height/2);
+      let i = playButton.instrument;
+      text("Bravo ! C'est bien "+determinant(i)+" "+instruments[i], width/2,height/2);
     }
     else if(hasLost) {
       textSize(0.05*dimension);
       let i = playButton.instrument;
-      let determinant;
-      switch(i) {
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 15:
-        case 23: determinant = 'une'; break;
-        case 18: determinant = 'du'; break;
-        case 24: determinant = 'des'; break;
-        default: determinant = 'un';
-      }
-      text("Oups, c'est raté...\nC'était "+determinant+" "+instruments[i]+" !", width/2,height/2);
+      text("Oups, c'est raté...\nC'était "+determinant(i)+" "+instruments[i]+" !", width/2,height/2);
     }
     else {
       for(let b = 0; b < numBut; b++) {
@@ -1302,7 +1306,6 @@ function keyPressed() {
 var lastTouched = 0;
 
 function mousePressed() {
-  console.log('yup');
   if(isMobile.any() && millis() - lastTouched < 1000) return false;
   lastTouched = millis();
   if(inMenu) {
