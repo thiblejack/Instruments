@@ -1306,7 +1306,7 @@ function keyPressed() {
 var lastTouched = 0;
 
 function mousePressed() {
-  if(isMobile.any() && millis() - lastTouched < 300) return false;
+  if(isMobile.any() && millis() - lastTouched < 100) return false;
   lastTouched = millis();
   if(inMenu) {
     for(let c = 0; c < classes.length; c++) {
