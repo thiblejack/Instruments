@@ -1189,7 +1189,7 @@ function setup() {
   classes.push(new ClasButton('tout',       0, 28,0 ));
   classes.push(new ClasButton('cordes',     0, 7, 1 ));
   classes.push(new ClasButton('vents',      8, 18,2 ));
-  classes.push(new ClasButton('claviers',   19,22,3 ));
+  classes.push(new ClasButton('claviers',   19,23,3 ));
   classes.push(new ClasButton('percussions',24,28,4 ));
   classes.push(new ClasButton('frottées',   0, 3, 5 ));
   classes.push(new ClasButton('pincées',    4, 7, 6 ));
@@ -1306,7 +1306,7 @@ function keyPressed() {
 var lastTouched = 0;
 
 function mousePressed() {
-  if(isMobile.any() && millis() - lastTouched < 1000) return false;
+  if(isMobile.any() && millis() - lastTouched < 300) return false;
   lastTouched = millis();
   if(inMenu) {
     for(let c = 0; c < classes.length; c++) {
