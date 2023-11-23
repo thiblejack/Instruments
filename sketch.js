@@ -1207,9 +1207,23 @@ function draw() {
   noStroke();
   fill(black);
   textFont(fontM);
-  textSize(0.075*dimension);
   textAlign(CENTER,CENTER);
+  textSize(0.075*dimension);
   text('Jeu des instruments', width/2,height/2-0.4*dimension);
+
+  if(level == 0 && !inMenu && !hasLost) {
+    textFont(fontL);
+    textSize(0.05*dimension);
+    text('Devine quel instrument tu entends !', width/2,height/2-0.26*dimension);
+    textSize(0.035*dimension);
+    text("Si tu n'entends rien,\nmonte le son et clique ici", width/2,height/2+0.24*dimension);
+    stroke('black');
+    strokeCap(ROUND);
+    line(width/2,height/2+0.31*dimension,width/2,height/2+0.34*dimension);
+    line(width/2-0.01*dimension,height/2+0.33*dimension,width/2,height/2+0.34*dimension);
+    line(width/2+0.01*dimension,height/2+0.33*dimension,width/2,height/2+0.34*dimension);
+    noStroke();
+  }
 
   if(inMenu) {
     quitButton.draw();
@@ -1241,10 +1255,12 @@ function draw() {
         name = classes[floor((c-3)/2)].name+' à '+classes[c].name;
       }
       textSize(0.03*dimension);
+      textFont(fontM);
       text(name, width/2-0.28*dimension,height/2+0.393*dimension);
     }
     else {
       textSize(0.05*dimension);
+      textFont(fontM);
       textAlign(LEFT,CENTER);
       text('Score : '+level, width/2-0.375*dimension,height/2+0.39*dimension);
       textAlign(CENTER);
@@ -1252,11 +1268,13 @@ function draw() {
 
     if(hasWon) {
       textSize(0.05*dimension);
+      textFont(fontL);
       let i = playButton.instrument;
       text("Bravo ! C'est bien "+determinant(i)+" "+instruments[i], width/2,height/2);
     }
     else if(hasLost) {
       textSize(0.05*dimension);
+      textFont(fontL);
       let i = playButton.instrument;
       text("Oups, c'est raté...\nC'était "+determinant(i)+" "+instruments[i]+" !", width/2,height/2);
     }
